@@ -118,6 +118,66 @@
     }
 
     /**
+     * Handle a a set of routes: if a match is found, execute the relating handling function.
+     *
+     * @param array $routes       Collection of route patterns and their handling functions
+     * @param bool  $quitAfterRun Does the handle function need to quit after one route was matched?
+     *
+     * @return int The number of routes handled
+     */
+    private function handle($routes, $quitAfterRun = false)
+    {
+      # counter to keep track of the number of routes we've handled
+      $numHandled = 0;
+
+      # the current page URL
+      $uri = $this->getPath();
+
+      # loop all routes
+      foreach ($routes as $route) {
+        /**
+         * TODO:  
+         */
+        # replace all curly braces matches {} into word patterns
+        $route['pattern'] = preg_replace('/\/{(.*?)}/', '/(.*?)', $route['pattern']);
+
+        # we have a match!
+        if (preg_match_all('~^' . $route['pattern'] . '$~', $uri, $matches, PREG_OFFSET_CAPTURE)) {
+          # rework matches to only contain the matches, not the orig string
+          $matches = array_slice($matches, 1);
+
+          # extract the matched URL parameters (and only THE parameters)
+          $params = array_map(function ($match, $index) use ($matches) {
+
+            # we have a following parameter : 
+            # take the substring from the current param position until the next one's position (thank you PREG_OFFSET_CAPTURE)
+            if (isset($matches[$index + 1]) && isset($matches[$index + 1][0]) && is_array($matches[$index + 1][0])) {
+              if ($matches[$index + 1][0][1] > -1) {
+                return trim(substr($match[0][0], 0, $matches[$index + 1][0][1] - $match[0][1]), '/');
+              }
+            } # We have no following parameters: return the whole lot
+
+            return isset($match[0][0]) && $match[0][1] != -1 ? trim($match[0][0], '/') : null;
+          }, $matches, array_keys($matches));
+
+          # call the handling function with the URL parameters if the desired input is callable
+          $this->invoke($route['callback'], $params);
+
+          ++$numHandled;
+
+          # if we need to quit, then quit
+          if ($quitAfterRun) {
+            break;
+          }
+        }
+      }
+
+      # return the number of routes handled
+      return $numHandled;
+    }
+
+
+    /**
      * Set a 404 fallback route callback to redirect in case others doesn't match
      *
      * @param Callable $callback
