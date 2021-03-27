@@ -24,7 +24,7 @@ Superpage is a simple, fast and lightweight, which means an awesome PHP router!<
 
 ## Installation
 
-Simply use source/Superpage.php
+You can require `Superpage.php` class, or use an autoloader like Loom or Composer.
 
 ## Demo
 
@@ -74,48 +74,50 @@ When a route matches against the current URL (e.g. `$_SERVER['REQUEST_URI']`), t
 
 ### Routing Shorthands
 
-Shorthands for single request methods are provided:
+Shorthands for single request methods are provided :
 
 ```php
-$router->get('pattern', function() { /* ... */ });
-$router->post('pattern', function() { /* ... */ });
-$router->put('pattern', function() { /* ... */ });
-$router->delete('pattern', function() { /* ... */ });
-$router->options('pattern', function() { /* ... */ });
-$router->patch('pattern', function() { /* ... */ });
+$superpage->get('pattern', function() { ··· });
+$superpage->post('pattern', function() { ··· });
+$superpage->put('pattern', function() { ··· });
+$superpage->delete('pattern', function() { ··· });
+$superpage->options('pattern', function() { ··· });
+$superpage->patch('pattern', function() { ··· });
 ```
 
-You can use this shorthand for a route that can be accessed using any method:
+You can use this shorthand for a route that can be accessed using any method :
 
 ```php
-$router->all('pattern', function() { … });
+$superpage->any('pattern', function() { ··· });
 ```
 
-Note: Routes must be hooked before `$router->run();` is being called.
+Note: Routes must be defined before `->run();` is being called.
 
-Note: There is no shorthand for `match()` as `bramus/router` will internally re-route such requrests to their equivalent `GET` request, in order to comply with RFC2616 _(see [note](#a-note-on-making-head-requests))_.
+Note: There is no shorthand for `head()` as Superpage will internally re-route such requests to their equivalent `GET` request, in order to comply with RFC2616 _(see [note](#a-note-on-making-head-requests))_.
 
 ### Route Patterns
 
 Route Patterns can be static or dynamic:
 
-- __Static Route Patterns__ contain no dynamic parts and must match exactly against the `path` part of the current URL.
-- __Dynamic Route Patterns__ contain dynamic parts that can vary per request. The varying parts are named __subpatterns__ and are defined using either Perl-compatible regular expressions (PCRE) or by using __placeholders__
+- __Static Route Patterns__ 
+
+  They contain no dynamic parts and must match exactly against the `path` part of the current URL.
+
+- __Dynamic Route Patterns__ 
+
+  They contain dynamic parts that can vary per request. The varying parts are named __subpatterns__ and are defined using either Perl-compatible regular expressions (PCRE) or by using __placeholders__
 
 #### Static Route Patterns
 
 A static route pattern is a regular string representing a URI. It will be compared directly against the `path` part of the current URL.
 
-Examples:
+Example : `/about`
 
--  `/about`
--  `/contact`
-
-Usage Examples:
+Usage Example :
 
 ```php
 // This route handling function will only be executed when visiting http(s)://www.example.org/about
-$router->get('/about', function() {
+$superpage->get('/about', function() {
     echo 'About Page Contents';
 });
 ```
@@ -126,8 +128,8 @@ This type of Route Patterns contain dynamic parts which can vary per request. Th
 
 Examples:
 
-- `/movies/(\d+)`
-- `/profile/(\w+)`
+- `/user/(\d+)`
+- `/blog/(\w+)`
 
 Commonly used PCRE-based subpatterns within Dynamic Route Patterns are:
 
@@ -143,22 +145,22 @@ The __subpatterns__ defined in Dynamic PCRE-based Route Patterns are converted t
 
 ```php
 // Bad
-$router->get('/hello/\w+', function($name) {
+$superpage->get('/hello/\w+', function($name) {
     echo 'Hello ' . htmlentities($name);
 });
 
 // Good
-$router->get('/hello/(\w+)', function($name) {
+$superpage->get('/hello/(\w+)', function($name) {
     echo 'Hello ' . htmlentities($name);
 });
 ```
 
-Note: The leading `/` at the very beginning of a route pattern is not mandatory, but is recommended.
+Note: The leading `/` at the very beginning of a route pattern is not mandatory, but recommended.
 
 When multiple subpatterns are defined, the resulting __route handling parameters__ are passed into the route handling function in the order they are defined in:
 
 ```php
-$router->get('/movies/(\d+)/photos/(\d+)', function($movieId, $photoId) {
+$superpage->get('/movies/(\d+)/photos/(\d+)', function($movieId, $photoId) {
     echo 'Movie #' . $movieId . ', photo #' . $photoId;
 });
 ```
@@ -167,7 +169,7 @@ $router->get('/movies/(\d+)/photos/(\d+)', function($movieId, $photoId) {
 
 This type of Route Patterns are the same as __Dynamic PCRE-based Route Patterns__, but with one difference: they don't use regexes to do the pattern matching but they use the more easy __placeholders__ instead. Placeholders are strings surrounded by curly braces, e.g. `{name}`. You don't need to add parens around placeholders.
 
-Examples:
+**Examples :**
 
 - `/movies/{id}`
 - `/profile/{username}`
@@ -175,7 +177,7 @@ Examples:
 Placeholders are easier to use than PRCEs, but offer you less control as they internally get translated to a PRCE that matches any character (`.*`).
 
 ```php
-$router->get('/movies/{movieId}/photos/{photoId}', function($movieId, $photoId) {
+$superpage->get('/movies/{movieId}/photos/{photoId}', function($movieId, $photoId) {
     echo 'Movie #' . $movieId . ', photo #' . $photoId;
 });
 ```
@@ -183,7 +185,7 @@ $router->get('/movies/{movieId}/photos/{photoId}', function($movieId, $photoId) 
 Note: the name of the placeholder does not need to match with the name of the parameter that is passed into the route handling function:
 
 ```php
-$router->get('/movies/{foo}/photos/{bar}', function($movieId, $photoId) {
+$superpage->get('/movies/{foo}/photos/{bar}', function($movieId, $photoId) {
     echo 'Movie #' . $movieId . ', photo #' . $photoId;
 });
 ```
@@ -194,7 +196,7 @@ $router->get('/movies/{foo}/photos/{bar}', function($movieId, $photoId) {
 Route subpatterns can be made optional by making the subpatterns optional by adding a `?` after them. Think of blog URLs in the form of `/blog(/year)(/month)(/day)(/slug)`:
 
 ```php
-$router->get(
+$superpage->get(
     '/blog(/\d+)?(/\d+)?(/\d+)?(/[a-z0-9_-]+)?',
     function($year = null, $month = null, $day = null, $slug = null) {
         if (!$year) { echo 'Blog overview'; return; }
@@ -213,8 +215,8 @@ Note: With optional parameters it is important that the leading `/` of the subpa
 The code snipped above unfortunately also responds to URLs like `/blog/foo` and states that the overview needs to be shown - which is incorrect. Optional subpatterns can be made successive by extending the parenthesized subpatterns so that they contain the other optional subpatterns: The pattern should resemble `/blog(/year(/month(/day(/slug))))` instead of the previous `/blog(/year)(/month)(/day)(/slug)`:
 
 ```php
-$router->get('/blog(/\d+(/\d+(/\d+(/[a-z0-9_-]+)?)?)?)?', function($year = null, $month = null, $day = null, $slug = null) {
-    // ...
+$superpage->get('/blog(/\d+(/\d+(/\d+(/[a-z0-9_-]+)?)?)?)?', function($year = null, $month = null, $day = null, $slug = null) {
+    # ...
 });
 ```
 
@@ -223,33 +225,33 @@ Note: It is highly recommended to __always__ define successive optional paramete
 To make things complete use [quantifiers](http://www.php.net/manual/en/regexp.reference.repetition.php) to require the correct amount of numbers in the URL:
 
 ```php
-$router->get('/blog(/\d{4}(/\d{2}(/\d{2}(/[a-z0-9_-]+)?)?)?)?', function($year = null, $month = null, $day = null, $slug = null) {
-    // ...
+$superpage->get('/blog(/\d{4}(/\d{2}(/\d{2}(/[a-z0-9_-]+)?)?)?)?', function($year = null, $month = null, $day = null, $slug = null) {
+    # ...
 });
 ```
 
 
 ### Subrouting / Mounting Routes
 
-Use `$router->mount($baseroute, $fn)` to mount a collection of routes onto a subroute pattern. The subroute pattern is prefixed onto all following routes defined in the scope. e.g. Mounting a callback `$fn` onto `/movies` will prefix `/movies` onto all following routes.
+Use `$superpage->mount($baseroute, $fn)` to mount a collection of routes onto a subroute pattern. The subroute pattern is prefixed onto all following routes defined in the scope. e.g. Mounting a callback `$fn` onto `/movies` will prefix `/movies` onto all following routes.
 
 ```php
-$router->mount('/movies', function() use ($router) {
+$superpage->mount('/movies', function() use ($superpage) {
 
-    // will result in '/movies/'
-    $router->get('/', function() {
+    # will result in '/movies/'
+    $superpage->get('/', function() {
         echo 'movies overview';
     });
-
-    // will result in '/movies/id'
-    $router->get('/(\d+)', function($id) {
+  
+    # will result in '/movies/id'
+    $superpage->get('/(\d+)', function($id) {
         echo 'movie id ' . htmlentities($id);
     });
 
 });
 ```
 
-Nesting of subroutes is possible, just define a second `$router->mount()` in the callable that's already contained within a preceding `$router->mount()`.
+Nesting of subroutes is possible, just define a second `$superpage->mount()` in the callable that's already contained within a preceding `$superpage->mount()`.
 
 ### Custom "404 Not Found"
 
@@ -284,7 +286,7 @@ $superpage->get('/([a-z0-9-]+)', function($id) use ($superpage) {
 Run one (1) middleware function, name the __After Router Middleware__ _(in other projects sometimes referred to as after app middlewares)_ after the routing was processed. Just pass it along the `$superpage->run()` function. The run callback is route independent.
 
 ```php
-$router->run(function() { … });
+$superpage->run(function() { … });
 ```
 
 **Note :** If the route handling function has `exit()`ed the run callback won't be run.
@@ -302,8 +304,8 @@ Out-of-the box **Superpage** will run in any (sub)folder you place it into … n
 Say you have a server hosting the domain `www.example.org` using `public_html/` as its document root, with this little _entry script_ `index.php`:
 
 ```php
-$router->get('/', function() { echo 'Index'; });
-$router->get('/hello', function() { echo 'Hello!'; });
+$superpage->get('/', function() { echo 'Index'; });
+$superpage->get('/hello', function() { echo 'Hello!'; });
 ```
 
 - If your were to place this file _(along with its accompanying `.htaccess` file or the like)_ at the document root level (e.g. `public_html/index.php`), **Superpage** will mount all routes onto the domain root (e.g. `/`) and thus respond to `https://www.example.org/` and `https://www.example.org/hello`.
@@ -316,12 +318,12 @@ In case you **don't** want Superpage to automatically adapt itself to the folder
 
 ```php
 // Override auto base path detection
-$router->setBasePath('/');
+$superpage->setBasePath('/');
 
-$router->get('/', function() { echo 'Index'; });
-$router->get('/hello', function() { echo 'Hello!'; });
+$superpage->get('/', function() { echo 'Index'; });
+$superpage->get('/hello', function() { echo 'Hello!'; });
 
-$router->run();
+$superpage->run();
 ```
 
 If you were to place this file into a subfolder (e.g. `public_html/some/sub/folder/index.php`), it will still mount the routes onto the domain root (e.g. `/`) and thus respond to `https://www.example.org/` and `https://www.example.org/hello` _(given that your `.htaccess` file – placed at the document root level – rewrites requests to it)_
@@ -333,14 +335,14 @@ Integrate other libraries with **Superpage** by making good use of the `use` key
 ```php
 $tpl = new \Foo\Bar\Template();
 
-$router->get('/', function() use ($tpl) {
+$superpage->get('/', function() use ($tpl) {
     $tpl->load('home.tpl');
     $tpl->setdata(array(
-        'name' => 'Bramus!'
+        'name' => 'Berk Cambaz'
     ));
 });
 
-$router->run(function() use ($tpl) {
+$superpage->run(function() use ($tpl) {
     $tpl->display();
 });
 ```
@@ -384,7 +386,7 @@ Superpage ships with unit tests using [Seekr](https://github.com/dorkodu/seekr/)
 
 **Superpage** is heavily inspired by `bramus/router`. 
 
-Even it works well, we wanted a simple and lightweight approach.
+Even it works well, we wanted a simpler approach.
 
 ## License
 
