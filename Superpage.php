@@ -172,4 +172,22 @@
       return '/' . trim($uri, '/');
     }
 
+    /**
+     * Get all request headers.
+     *
+     * @return array The request headers
+     */
+    public function getRequestHeaders()
+    {
+      $headers = array();
+
+      # Method getallheaders() not available or went wrong: manually extract 'm
+      foreach ($_SERVER as $name => $value) {
+        if ((substr($name, 0, 5) == 'HTTP_') || ($name == 'CONTENT_TYPE') || ($name == 'CONTENT_LENGTH')) {
+          $headers[str_replace(array(' ', 'Http'), array('-', 'HTTP'), ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+        }
+      }
+
+      return $headers;
+    }
   }
