@@ -87,7 +87,7 @@
      */
     public function post($pattern, $fn)
     {
-      $this->post($pattern, 'POST', $fn);
+      $this->to($pattern, 'POST', $fn);
     }
 
     /**
