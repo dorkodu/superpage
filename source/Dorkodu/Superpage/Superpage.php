@@ -12,12 +12,30 @@
    */
   class SuperPage
   {
+    /**
+     * @var array The route patterns and their handling functions
+     */
     private $routes = array();
 
+    /**
+     * @var string Current base route, used for (sub)route mounting
+     */
     public $root;
+
+    /**
+     * @var string The Request Method that needs to be handled
+     */
     private $requestMethod;
 
+    /**
+     * @var callable The function to be executed when no route has been matched
+     */
     private $notFoundCallback;
+
+    /**
+     * @var string The Server Base Path for Router Execution
+     */
+    private $serverBasePath;
     
     /**
      * Store a route and a handling function to be executed when accessed using one of the specified methods.
@@ -346,23 +364,22 @@
      */
     public function getBasePath()
     {
-      # Check if server base path is defined, if not define it.
-      if ($this->root === null) {
-        $this->root = implode('/', array_slice(explode('/', $_SERVER['SCRIPT_NAME']), 0, -1)) . '/';
+      // Check if server base path is defined, if not define it.
+      if ($this->serverBasePath === null) {
+        $this->serverBasePath = implode('/', array_slice(explode('/', $_SERVER['SCRIPT_NAME']), 0, -1)) . '/';
       }
 
-      return $this->root;
+      return $this->serverBasePath;
     }
 
     /**
-     * Explicilty sets the server base path. 
-     * To be used when your entry script path differs from your entry URLs.
+     * Explicilty sets the server base path. To be used when your entry script path differs from your entry URLs.
      *
      * @param string
      */
-    public function setBasePath($root)
+    public function setBasePath($serverBasePath)
     {
-        $this->root = $root;
+      $this->serverBasePath = $serverBasePath;
     }
 
   }
