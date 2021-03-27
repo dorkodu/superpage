@@ -38,4 +38,15 @@
         );
       }
     }
+
+    /**
+     * Shorthand for a route accessed using any method.
+     *
+     * @param string          $pattern A route pattern such as /about/system
+     * @param object|callable $fn      The handling function to be executed
+     */
+    public function any($pattern, $fn)
+    {
+      $this->to($pattern, 'GET|POST|PUT|DELETE|OPTIONS|PATCH|HEAD', $fn);
+    }
   }
