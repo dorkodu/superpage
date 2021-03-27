@@ -51,7 +51,7 @@ $superpage->to('/', 'GET', function() {
 	echo "Home";
 });
 
-$superpage->to('/about', 'GET', function() { 
+$superpage->get('/about', function() { 
 	echo "About";
 });
 
@@ -91,9 +91,9 @@ You can use this shorthand for a route that can be accessed using any method :
 $superpage->any('pattern', function() { ··· });
 ```
 
-Note: Routes must be defined before `->run();` is being called.
+Note: Routes must be defined before `$superpage->run();` is being called.
 
-Note: There is no shorthand for `head()` as Superpage will internally re-route such requests to their equivalent `GET` request, in order to comply with RFC2616 _(see [note](#a-note-on-making-head-requests))_.
+Note: There is no shorthand like `head()` as Superpage will internally re-route such requests to their equivalent `GET` request, in order to comply with RFC2616 _(see [note](#a-note-on-making-head-requests))_.
 
 ### Route Patterns
 
@@ -167,7 +167,7 @@ $superpage->get('/movies/(\d+)/photos/(\d+)', function($movieId, $photoId) {
 
 #### Dynamic Placeholder-based Route Patterns
 
-This type of Route Patterns are the same as __Dynamic PCRE-based Route Patterns__, but with one difference: they don't use regexes to do the pattern matching but they use the more easy __placeholders__ instead. Placeholders are strings surrounded by curly braces, e.g. `{name}`. You don't need to add parens around placeholders.
+This type of Route Patterns are the same as __Dynamic PCRE-based Route Patterns__, but with one difference: they don't use regex to do the pattern matching but they use the more easy __placeholders__ instead. Placeholders are strings surrounded by curly braces, e.g. `{name}`. You don't need to add paren's around placeholders.
 
 **Examples :**
 
@@ -177,12 +177,12 @@ This type of Route Patterns are the same as __Dynamic PCRE-based Route Patterns_
 Placeholders are easier to use than PRCEs, but offer you less control as they internally get translated to a PRCE that matches any character (`.*`).
 
 ```php
-$superpage->get('/movies/{movieId}/photos/{photoId}', function($movieId, $photoId) {
-    echo 'Movie #' . $movieId . ', photo #' . $photoId;
+$superpage->get('/user/{userId}/post/{postId}', function($userId, $postId) {
+    echo 'User #' . $userId . ', post #' . $postId;
 });
 ```
 
-Note: the name of the placeholder does not need to match with the name of the parameter that is passed into the route handling function:
+Note: the name of the placeholder does NOT NEED TO MATCH with the name of the parameter that is passed into the route handling function :
 
 ```php
 $superpage->get('/movies/{foo}/photos/{bar}', function($movieId, $photoId) {
@@ -231,13 +231,12 @@ $superpage->get('/blog(/\d{4}(/\d{2}(/\d{2}(/[a-z0-9_-]+)?)?)?)?', function($yea
 ```
 
 
-### Subrouting / Mounting Routes
+### Sub-routing / Mounting Routes
 
-Use `$superpage->mount($baseroute, $fn)` to mount a collection of routes onto a subroute pattern. The subroute pattern is prefixed onto all following routes defined in the scope. e.g. Mounting a callback `$fn` onto `/movies` will prefix `/movies` onto all following routes.
+Use `$superpage->mount($baseroute, $callback)` to mount a collection of routes onto a sub-route pattern. The sub-route pattern is prefixed onto all following routes defined in the scope. e.g. Mounting a callback `$callback` onto `/movies` will prefix `/movies` onto all following routes.
 
 ```php
 $superpage->mount('/movies', function() use ($superpage) {
-
     # will result in '/movies/'
     $superpage->get('/', function() {
         echo 'movies overview';
@@ -251,7 +250,7 @@ $superpage->mount('/movies', function() use ($superpage) {
 });
 ```
 
-Nesting of subroutes is possible, just define a second `$superpage->mount()` in the callable that's already contained within a preceding `$superpage->mount()`.
+Nesting of sub-routes is possible, just define a second `$superpage->mount()` in the callable that's already contained within a preceding `$superpage->mount()`.
 
 ### Custom "404 Not Found"
 
@@ -286,7 +285,7 @@ $superpage->get('/([a-z0-9-]+)', function($id) use ($superpage) {
 Run one (1) middleware function, name the __After Router Middleware__ _(in other projects sometimes referred to as after app middlewares)_ after the routing was processed. Just pass it along the `$superpage->run()` function. The run callback is route independent.
 
 ```php
-$superpage->run(function() { … });
+$superpage->run(function() { ... });
 ```
 
 **Note :** If the route handling function has `exit()`ed the run callback won't be run.
@@ -310,7 +309,7 @@ $superpage->get('/hello', function() { echo 'Hello!'; });
 
 - If your were to place this file _(along with its accompanying `.htaccess` file or the like)_ at the document root level (e.g. `public_html/index.php`), **Superpage** will mount all routes onto the domain root (e.g. `/`) and thus respond to `https://www.example.org/` and `https://www.example.org/hello`.
 
-- If you were to move this file _(along with its accompanying `.htaccess` file or the like)_ into a subfolder (e.g. `public_html/demo/index.php`), `bramus/router` will mount all routes onto the current path (e.g. `/demo`) and thus repsond to `https://www.example.org/demo` and `https://www.example.org/demo/hello`. There's **no** need for `$superpage->mount(…)` in this case.
+- If you were to move this file _(along with its accompanying `.htaccess` file or the like)_ into a subfolder (e.g. `public_html/demo/index.php`), __Superpage__ will mount all routes onto the current path (e.g. `/demo`) and thus repsond to `https://www.example.org/demo` and `https://www.example.org/demo/hello`. There's **no** need for `$superpage->mount(…)` in this case.
 
 #### Disabling subfolder support
 
