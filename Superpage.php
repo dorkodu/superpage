@@ -95,5 +95,17 @@
       $this->to($pattern, 'DELETE', $fn);
     }
 
+    /**
+     * Shorthand for a route accessed using PUT.
+     *
+     * @param string          $pattern A route pattern such as /about/system
+     * @param object|callable $fn      The handling function to be executed
+     */
+    public function put($pattern, $fn)
+    {
+      $this->to($pattern, 'PUT', $fn);
+    }
+
+
 
   }
