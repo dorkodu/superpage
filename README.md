@@ -1,42 +1,34 @@
 # Superpage
 
-Superpage is a simple, fast and lightweight PHP router.<br>
+Superpage is a simple, fast and lightweight, which means an awesome PHP router!<br>
 
 
 ## Features
 
 - Supports `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`, `PATCH` and `HEAD` request methods
 - [Static Route Patterns](#route-patterns)
-- Dynamic Route Patterns: [Dynamic PCRE-based Route Patterns](#dynamic-pcre-based-route-patterns) or [Dynamic Placeholder-based Route Patterns](#dynamic-placeholder-based-route-patterns)
+- Dynamic Route Patterns: 
+  - [Dynamic PCRE-based Route Patterns](#dynamic-pcre-based-route-patterns) 
+  - [Dynamic Placeholder-based Route Patterns](#dynamic-placeholder-based-route-patterns)
 - [Optional Route Subpatterns](#optional-route-subpatterns)
 - [Supports `X-HTTP-Method-Override` header](#overriding-the-request-method)
 - [Subrouting / Mounting Routes](#subrouting--mounting-routes)
 - [Custom 404 handling](#custom-404)
-- [Before Route Middlewares](#before-route-middlewares)
-- [Before Router Middlewares / Before App Middlewares](#before-router-middlewares)
 - [After Router Middleware / After App Middleware (Finish Callback)](#after-router-middleware--run-callback)
 - [Works fine in subfolders](#subfolder-support)
 
 ## Prerequisites/Requirements
 
 - PHP 7.2+ or greater
-- [URL Rewriting](https://gist.github.com/bramus/5332525)
+- URL Rewriting
 
 ## Installation
 
-Installation is possible using Composer
-
-```
-composer require bramus/router ~1.5
-```
-
-
+Simply use source/Superpage.php
 
 ## Demo
 
-A demo is included in the `demo` subfolder. Serve it using your favorite web server, or using PHP 5.4+'s built-in server by executing `php -S localhost:8080` on the shell. A `.htaccess` for use with Apache is included.
-
-Additionally a demo of a mutilingual router is also included. This can be found in the `demo-multilang` subfolder and can be ran in the same manner as the normal demo.
+A demo is included in the `demo` sub-folder. Serve it using your favorite web server, or using PHP 5.4+'s built-in server by executing `php -S localhost:8080` on the shell. A `.htaccess` for use with Apache is included.
 
 ## Usage
 
