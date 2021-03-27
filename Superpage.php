@@ -106,6 +106,14 @@
       $this->to($pattern, 'PUT', $fn);
     }
 
-
-
+    /**
+     * Shorthand for a route accessed using OPTIONS.
+     *
+     * @param string          $pattern A route pattern such as /about/system
+     * @param object|callable $fn      The handling function to be executed
+     */
+    public function options($pattern, $fn)
+    {
+      $this->to($pattern, 'OPTIONS', $fn);
+    }
   }
