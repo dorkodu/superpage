@@ -57,6 +57,25 @@
     }
 
     /**
+     * Redirects a route to another
+     *
+     * @param string $from
+     * @param string $to
+     * @param int $statusCode
+     */
+    public function redirect($from, $to, $statusCode = 301)
+    {
+      $fromPattern = $this->unifyUriPattern($from);
+      $toPattern = $this->unifyUriPattern($from);
+
+      $this->routes['GET'][] = array(
+          'pattern' => $fromPattern,
+          'redirect' => $toPattern,
+          'statusCode' => $statusCode
+      );
+    }
+
+    /**
      * Unifies URI pattern
      *
      * @param string $pattern
@@ -212,25 +231,20 @@
 
         # we have a match!
         if (preg_match_all('~^' . $route['pattern'] . '$~', $uri, $matches, PREG_OFFSET_CAPTURE)) {
-          # rework matches to only contain the matches, not the orig string
+          # rework matches to only contain the matches, not the original string
           $matches = array_slice($matches, 1);
 
           # extract the matched URL parameters (and only THE parameters)
-          $params = array_map(function ($match, $index) use ($matches) {
+          $params = $this->extractMatchedURLParams($matches);
 
-            # we have a following parameter : 
-            # take the substring from the current param position until the next one's position (thank you PREG_OFFSET_CAPTURE)
-            if (isset($matches[$index + 1]) && isset($matches[$index + 1][0]) && is_array($matches[$index + 1][0])) {
-              if ($matches[$index + 1][0][1] > -1) {
-                return trim(substr($match[0][0], 0, $matches[$index + 1][0][1] - $match[0][1]), '/');
-              }
-            } # We have no following parameters: return the whole lot
-
-            return isset($match[0][0]) && $match[0][1] != -1 ? trim($match[0][0], '/') : null;
-          }, $matches, array_keys($matches));
-
-          # call the handling function with the URL parameters if the desired input is callable
-          $this->invoke($route['callback'], $params);
+          if (isset($route['redirect'])) {
+            # static redirect
+            # TODO: if has any extracted params, pass them to the redirected callback
+            header('Location:'.$route['redirect'], true, $route['statusCode']);
+          } else {
+            # call the handling function with the URL parameters if the desired input is callable
+            $this->invoke($route['callback'], $params);
+          }
 
           ++$numHandled;
 
@@ -240,9 +254,29 @@
           }
         }
       }
-
       # return the number of routes handled
       return $numHandled;
+    }
+
+    /**
+     * Extracts the matched URL parameters (and only THE parameters)
+     *
+     * @param array $matches
+     * @return void
+     */
+    private function extractMatchedURLParams(array $matches)
+    {
+      return array_map(function ($match, $index) use ($matches) {
+        # we have a following parameter : 
+        # take the substring from the current param position until the next one's position (thank you PREG_OFFSET_CAPTURE)
+        if (isset($matches[$index + 1]) && isset($matches[$index + 1][0]) && is_array($matches[$index + 1][0])) {
+          if ($matches[$index + 1][0][1] > -1) {
+            return trim(substr($match[0][0], 0, $matches[$index + 1][0][1] - $match[0][1]), '/');
+          }
+        } 
+        # We have no following parameters: return the whole lot
+        return isset($match[0][0]) && $match[0][1] != -1 ? trim($match[0][0], '/') : null;
+      }, $matches, array_keys($matches));
     }
 
     /**
