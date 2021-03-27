@@ -12,5 +12,10 @@
    */
   class SuperPage
   {
-    
+    private $routes = array();
+
+    public $root;
+    private $requestMethod;
+
+    private $notFoundCallback;
   }
