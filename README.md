@@ -1,6 +1,6 @@
-# Superpage
+# SuperPage
 
-Superpage is a simple, fast and lightweight, which means an awesome PHP router!<br>
+SuperPage is a simple, fast and lightweight, which means an awesome PHP router!<br>
 
 
 ## Features
@@ -24,7 +24,7 @@ Superpage is a simple, fast and lightweight, which means an awesome PHP router!<
 
 ## Installation
 
-You can require `Superpage.php` class, or use an autoloader like Loom or Composer.
+You can require `SuperPage.php` class, or use an autoloader like Loom or Composer.
 
 ## Demo
 
@@ -32,9 +32,9 @@ A demo is included in the `demo` sub-folder. Serve it using your favorite web se
 
 ## Usage
 
-- Create an instance of `\Dorkodu\Superpage\Superpage`.
+- Create an instance of `\Dorkodu\SuperPage\SuperPage`.
 - Define your routes.
-- Then run Superpage!
+- Then run SuperPage!
 
 ```php
 /*
@@ -44,7 +44,7 @@ A demo is included in the `demo` sub-folder. Serve it using your favorite web se
 require __DIR__ . '/loot/loom-weaver.php';
 
 # Create Router instance
-$superpage = new \Dorkodu\Superpage\Superpage();
+$superpage = new \Dorkodu\SuperPage\SuperPage();
 
 # Define routes
 $superpage->to('/', 'GET', function() { 
@@ -68,7 +68,7 @@ Hook __routes__ (a combination of one or more HTTP methods and a pattern) using 
 $superpage->to('...pattern', 'GET|POST|...[METHOD]', function() { ··· });
 ```
 
-Superpage supports `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD` _(see [note](#a-note-on-making-head-requests))_, and `OPTIONS` HTTP request methods. Pass in a single request method, or multiple request methods separated by `|`.
+SuperPage supports `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD` _(see [note](#a-note-on-making-head-requests))_, and `OPTIONS` HTTP request methods. Pass in a single request method, or multiple request methods separated by `|`.
 
 When a route matches against the current URL (e.g. `$_SERVER['REQUEST_URI']`), the attached __route handling function__ will be executed. The route handling function must be a [callable](http://php.net/manual/en/language.types.callable.php). Only the first route matched will be handled. When no matching route is found, a 404 handler will be executed.
 
@@ -93,7 +93,7 @@ $superpage->any('pattern', function() { ··· });
 
 Note: Routes must be defined before `$superpage->run();` is being called.
 
-Note: There is no shorthand like `head()` as Superpage will internally re-route such requests to their equivalent `GET` request, in order to comply with RFC2616 _(see [note](#a-note-on-making-head-requests))_.
+Note: There is no shorthand like `head()` as SuperPage will internally re-route such requests to their equivalent `GET` request, in order to comply with RFC2616 _(see [note](#a-note-on-making-head-requests))_.
 
 ### Route Patterns
 
@@ -298,7 +298,7 @@ Use `X-HTTP-Method-Override` to override the HTTP Request Method. Only works whe
 
 ### Subfolder support
 
-Out-of-the box **Superpage** will run in any (sub)folder you place it into … no adjustments to your code are needed. You can freely move your _entry script_ `index.php` around, and the router will automatically adapt itself to work relatively from the current folder's path by mounting all routes onto that __basePath__.
+Out-of-the box **SuperPage** will run in any (sub)folder you place it into … no adjustments to your code are needed. You can freely move your _entry script_ `index.php` around, and the router will automatically adapt itself to work relatively from the current folder's path by mounting all routes onto that __basePath__.
 
 Say you have a server hosting the domain `www.example.org` using `public_html/` as its document root, with this little _entry script_ `index.php`:
 
@@ -307,13 +307,13 @@ $superpage->get('/', function() { echo 'Index'; });
 $superpage->get('/hello', function() { echo 'Hello!'; });
 ```
 
-- If your were to place this file _(along with its accompanying `.htaccess` file or the like)_ at the document root level (e.g. `public_html/index.php`), **Superpage** will mount all routes onto the domain root (e.g. `/`) and thus respond to `https://www.example.org/` and `https://www.example.org/hello`.
+- If your were to place this file _(along with its accompanying `.htaccess` file or the like)_ at the document root level (e.g. `public_html/index.php`), **SuperPage** will mount all routes onto the domain root (e.g. `/`) and thus respond to `https://www.example.org/` and `https://www.example.org/hello`.
 
-- If you were to move this file _(along with its accompanying `.htaccess` file or the like)_ into a subfolder (e.g. `public_html/demo/index.php`), __Superpage__ will mount all routes onto the current path (e.g. `/demo`) and thus repsond to `https://www.example.org/demo` and `https://www.example.org/demo/hello`. There's **no** need for `$superpage->mount(…)` in this case.
+- If you were to move this file _(along with its accompanying `.htaccess` file or the like)_ into a subfolder (e.g. `public_html/demo/index.php`), __SuperPage__ will mount all routes onto the current path (e.g. `/demo`) and thus repsond to `https://www.example.org/demo` and `https://www.example.org/demo/hello`. There's **no** need for `$superpage->mount(…)` in this case.
 
 #### Disabling subfolder support
 
-In case you **don't** want Superpage to automatically adapt itself to the folder its being placed in, it's possible to manually override the _basePath_ by calling `setBasePath()`. This is necessary in the _(uncommon)_ situation where your _entry script_ and your _entry URLs_ are not tightly coupled _(e.g. when the entry script is placed into a subfolder that does not need be part of the URLs it responds to)_.
+In case you **don't** want SuperPage to automatically adapt itself to the folder its being placed in, it's possible to manually override the _basePath_ by calling `setBasePath()`. This is necessary in the _(uncommon)_ situation where your _entry script_ and your _entry URLs_ are not tightly coupled _(e.g. when the entry script is placed into a subfolder that does not need be part of the URLs it responds to)_.
 
 ```php
 // Override auto base path detection
@@ -329,7 +329,7 @@ If you were to place this file into a subfolder (e.g. `public_html/some/sub/fold
 
 ## Integration with other libraries
 
-Integrate other libraries with **Superpage** by making good use of the `use` keyword to pass dependencies into the handling functions.
+Integrate other libraries with **SuperPage** by making good use of the `use` keyword to pass dependencies into the handling functions.
 
 ```php
 $tpl = new \Foo\Bar\Template();
@@ -369,24 +369,24 @@ When making `HEAD` requests all output will be buffered to prevent any content t
 
 > The HEAD method is identical to GET except that the server MUST NOT return a message-body in the response. The meta data contained in the HTTP headers in response to a HEAD request should be identical to the information sent in response to a GET request. This method can be used for obtaining meta data about the entity implied by the request without transferring the entity-body itself. This method is often used for testing hypertext links for validity, accessibility, and recent modification.
 
-To achieve this, **Superpage** will internally re-route `HEAD` requests to their equivalent `GET` request and automatically suppress all output.
+To achieve this, **SuperPage** will internally re-route `HEAD` requests to their equivalent `GET` request and automatically suppress all output.
 
 
 ## Tests
 
-Superpage ships with unit tests using [Seekr](https://github.com/dorkodu/seekr/).
+SuperPage ships with unit tests using [Seekr](https://github.com/dorkodu/seekr/).
 
-- To test the Superpage library, run  `SuperpageTest.php` from PHP CLI. 
+- To test the SuperPage library, run  `SuperPageTest.php` from PHP CLI. 
 
-  Like `php test/SuperpageTest.php`, if you are in the root project folder.
+  Like `php test/SuperPageTest.php`, if you are in the root project folder.
 
 
 ## Acknowledgements
 
-**Superpage** is heavily inspired by `bramus/router`. 
+**SuperPage** is heavily inspired by `bramus/router`. 
 
 Even it works well, we wanted a simpler approach.
 
 ## License
 
-**Superpage** is released under the MIT public license. See the `LICENSE` for details.
+**SuperPage** is released under the MIT public license. See the `LICENSE` for details.
