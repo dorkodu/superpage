@@ -117,6 +117,46 @@
       $this->to($pattern, 'OPTIONS', $fn);
     }
 
+
+    /**
+     * Execute the router.
+     * Loop all defined routes, and execute the callback function if a match was found.
+     *
+     * @param callable $callback Function to be executed after a matching route was handled (= after router middleware)
+     *
+     * @return bool
+     */
+    public function run($callback = null)
+    {
+      # define which method we need to handle
+      $this->requestMethod = $this->getRequestMethod();
+
+      # handle all routes
+      $numHandled = 0;
+      if (isset($this->routes[$this->requestMethod])) {
+        $numHandled = $this->handle($this->routes[$this->requestMethod], true);
+      }
+
+      # if no route was handled, trigger the 404 (if any)
+      if ($numHandled === 0) {
+        $this->notFound();
+      } 
+      
+      # if a route was handled, perform the finish callback (if any)
+      else {
+        if ($callback && is_callable($callback))
+          $callback();
+      }
+
+      # if it originally was a HEAD request, clean up after ourselves by emptying the output buffer
+      if ($_SERVER['REQUEST_METHOD'] == 'HEAD') {
+        ob_end_clean();
+      }
+
+      # return true if a route was handled, false otherwise
+      return $numHandled !== 0;
+    }
+
     /**
      * Handle a a set of routes: if a match is found, execute the relating handling function.
      *
