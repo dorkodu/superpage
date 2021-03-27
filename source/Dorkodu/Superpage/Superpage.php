@@ -46,15 +46,26 @@
      */
     public function to(string $pattern, string $methods, $callback)
     {
-      $pattern = $this->root . '/' . trim($pattern, '/');
-      $pattern = $this->root ? rtrim($pattern, '/') : $pattern;
+      $pattern = $this->unifyUriPattern($pattern);
 
-      foreach (explode('|', $methods) as $method) {
+      foreach (explode('|', strtoupper($methods)) as $method) {
         $this->routes[$method][] = array(
             'pattern' => $pattern,
             'callback' => $callback,
         );
       }
+    }
+
+    /**
+     * Unifies URI pattern
+     *
+     * @param string $pattern
+     * @return string unified URI pattern
+     */
+    private function unifyUriPattern($pattern)
+    {
+      $pattern = $this->root . '/' . trim($pattern, '/');
+      $pattern = $this->root ? rtrim($pattern, '/') : $pattern;
     }
 
     /**
