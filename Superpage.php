@@ -220,5 +220,30 @@
       return $method;
     }
 
+    /**
+     * Return server base Path, and define it if isn't defined.
+     *
+     * @return string
+     */
+    public function getBasePath()
+    {
+      # Check if server base path is defined, if not define it.
+      if ($this->root === null) {
+        $this->root = implode('/', array_slice(explode('/', $_SERVER['SCRIPT_NAME']), 0, -1)) . '/';
+      }
+
+      return $this->root;
+    }
+
+    /**
+     * Explicilty sets the server base path. 
+     * To be used when your entry script path differs from your entry URLs.
+     *
+     * @param string
+     */
+    public function setBasePath($root)
+    {
+        $this->root = $root;
+    }
 
   }
