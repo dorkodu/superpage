@@ -223,9 +223,6 @@
 
       # loop all routes
       foreach ($routes as $route) {
-        /**
-         * TODO:  
-         */
         # replace all curly braces matches {} into word patterns
         $route['pattern'] = preg_replace('/\/{(.*?)}/', '/(.*?)', $route['pattern']);
 
