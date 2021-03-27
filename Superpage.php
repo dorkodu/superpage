@@ -116,4 +116,15 @@
     {
       $this->to($pattern, 'OPTIONS', $fn);
     }
+
+    /**
+     * Set a 404 fallback route callback to redirect in case others doesn't match
+     *
+     * @param Callable $callback
+     * @return void
+     */
+    public function fallback($callback)
+    {
+      $this->notFoundCallback = $callback;
+    }
   }
