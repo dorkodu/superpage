@@ -60,4 +60,16 @@
     {
       $this->to($pattern, 'GET', $fn);
     }
+
+    /**
+     * Shorthand for a route accessed using POST.
+     *
+     * @param string          $pattern A route pattern such as /about/system
+     * @param object|callable $fn      The handling function to be executed
+     */
+    public function post($pattern, $fn)
+    {
+      $this->post($pattern, 'POST', $fn);
+    }
+
   }
