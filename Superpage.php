@@ -127,4 +127,18 @@
     {
       $this->notFoundCallback = $callback;
     }
+
+    /**
+     * Invokes a user-given callable
+     *
+     * @param $fn
+     * @param array $params
+     * @return void
+     */
+    private function invoke($fn, $params = array())
+    {
+      if (is_callable($fn)) {
+        call_user_func_array($fn, $params);
+      }
+    }
   }
