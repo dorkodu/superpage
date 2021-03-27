@@ -129,6 +129,18 @@
     }
 
     /**
+     * Triggers 404 Not Found response
+     */
+    public function notFound()
+    {
+      if (isset($this->notFoundCallback) && !empty($this->notFoundCallback)) {
+        $this->invoke($this->notFoundCallback);
+      } else {
+        header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+      }
+    }
+
+    /**
      * Invokes a user-given callable
      *
      * @param $fn
