@@ -72,4 +72,15 @@
       $this->post($pattern, 'POST', $fn);
     }
 
+    /**
+     * Shorthand for a route accessed using PATCH.
+     *
+     * @param string          $pattern A route pattern such as /about/system
+     * @param object|callable $fn      The handling function to be executed
+     */
+    public function patch($pattern, $fn)
+    {
+      $this->to($pattern, 'PATCH', $fn);
+    }
+
   }
