@@ -153,4 +153,23 @@
         call_user_func_array($fn, $params);
       }
     }
+
+
+    /**
+     * Define the current relative URI.
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+      # Get the current request URI and remove rewrite base path from it (= allows one to run the router in a sub folder)
+      $uri = substr(rawurldecode($_SERVER['REQUEST_URI']), strlen($this->getBasePath()));
+      # Don't take query params into account on the URL
+      if (strstr($uri, '?')) {
+        $uri = substr($uri, 0, strpos($uri, '?'));
+      }
+      # Remove trailing slash + enforce a slash at the start
+      return '/' . trim($uri, '/');
+    }
+
   }
