@@ -216,6 +216,26 @@
       return $numHandled;
     }
 
+    /**
+     * Mounts a collection of callbacks onto a base route.
+     *
+     * @param string   $baseRoute The route sub pattern to mount the callbacks on
+     * @param callable $fn        The callback method
+     */
+    public function mount($baseRoute, $fn)
+    {
+      # track current base route
+      $curBaseRoute = $this->root;
+
+      # build new base route string
+      $this->root .= $baseRoute;
+
+      # call the callable
+      call_user_func($fn);
+
+      # restore original base route
+      $this->root = $curBaseRoute;
+    }
 
     /**
      * Set a 404 fallback route callback to redirect in case others doesn't match
@@ -290,7 +310,6 @@
 
       return $headers;
     }
-
 
     /**
      * Get the request method used, taking overrides into account.
