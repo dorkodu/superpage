@@ -83,4 +83,17 @@
       $this->to($pattern, 'PATCH', $fn);
     }
 
+
+    /**
+     * Shorthand for a route accessed using DELETE.
+     *
+     * @param string          $pattern A route pattern such as /about/system
+     * @param object|callable $fn      The handling function to be executed
+     */
+    public function delete($pattern, $fn)
+    {
+      $this->to($pattern, 'DELETE', $fn);
+    }
+
+
   }
