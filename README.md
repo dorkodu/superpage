@@ -1,4 +1,4 @@
-<img src="assets/superpage-dark.png" alt="SuperPage Logo" style="zoom: 50%; float: left" />
+<img src="assets/superpage-dark.png" alt="SuperPage Logo" style="zoom: 67%; float: left;" />
 
 # SuperPage
 
