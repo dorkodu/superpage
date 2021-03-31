@@ -8,7 +8,7 @@
 
   $FrontpageController = function() {
     echo "Hi there!<br>This is a demo for Superpage router.<br>Fast, isn't it?";
-    echo "<br><br>Routes : <br>/<br>/about<br>/greet/{name}";
+    echo "<br><br>Routes : <br>/<br>/about<br>/greet/{name}<br>/what (redirects to /about)";
   };
 
   $ErrorPageController = function() {
@@ -37,7 +37,7 @@
   $superpage->get("/about", $AboutPageController);
   $superpage->get("/greet/{name}", $GreetPageController);
 
-  $superpage->redirect("/who", "/about");
+  $superpage->redirect("/what", "/about");
 
   # not found
 
