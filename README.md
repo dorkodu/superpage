@@ -1,9 +1,8 @@
-![SuperPage Logo](assets/superpage-dark.png)
+<img src="assets/superpage-dark.png" alt="SuperPage Logo" style="zoom: 50%; float: left" />
 
 # SuperPage
 
-SuperPage is a simple, fast and lightweight, which means an awesome PHP router!<br>
-
+SuperPage is a simple, fast and lightweight, which means an awesome router for PHP apps!
 
 ## Features
 
@@ -93,9 +92,23 @@ You can use this shorthand for a route that can be accessed using any method :
 $superpage->any('pattern', function() { ··· });
 ```
 
-Note: Routes must be defined before `$superpage->run();` is being called.
+### Redirecting
 
-Note: There is no shorthand like `head()` as SuperPage will internally re-route such requests to their equivalent `GET` request, in order to comply with RFC2616 _(see [note](#a-note-on-making-head-requests))_.
+You can redirect a pattern to another absolute URI. This is what we choose for simplicity, may add *parameters* or *pattern-to-pattern* matches in the future. If you so desire, let us know by opening an issue. Maybe we can collaborate!
+
+```php
+/*
+ * 3rd parameter is request method, defaults to 'GET'
+ * 4th parameter is status code, defaults to 301
+ */ 
+$superpage->redirect('pattern', '/redirect-to', $method, $statusCode);
+```
+
+### 
+
+> **Note :** Routes must be defined before `$superpage->run();` is being called.
+
+> **Note :** There is no shorthand like `head()` as SuperPage will internally re-route such requests to their equivalent `GET` request, in order to comply with RFC2616 _(see [note](#a-note-on-making-head-requests))_.
 
 ### Route Patterns
 
@@ -387,7 +400,7 @@ SuperPage ships with unit tests using [Seekr](https://github.com/dorkodu/seekr/)
 
 ## Acknowledgements
 
-**SuperPage** is heavily inspired by `bramus/router`. 
+**SuperPage** is heavily inspired by `bramus/router`. I've stolen some useful docs content from there.
 
 Even it works well, we wanted a simpler approach.
 
