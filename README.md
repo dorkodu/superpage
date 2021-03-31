@@ -1,3 +1,5 @@
+![](assets/superpage-dark.png)
+
 # SuperPage
 
 SuperPage is a simple, fast and lightweight, which means an awesome PHP router!<br>
@@ -233,18 +235,20 @@ $superpage->get('/blog(/\d{4}(/\d{2}(/\d{2}(/[a-z0-9_-]+)?)?)?)?', function($yea
 
 ### Sub-routing / Mounting Routes
 
-Use `$superpage->mount($baseroute, $callback)` to mount a collection of routes onto a sub-route pattern. The sub-route pattern is prefixed onto all following routes defined in the scope. e.g. Mounting a callback `$callback` onto `/movies` will prefix `/movies` onto all following routes.
+Use `$superpage->mount($baseroute, $callback)` to mount a collection of routes onto a sub-route pattern. The sub-route pattern is prefixed onto all following routes defined in the scope. 
+
+e.g. Mounting a callback `$callback` onto `/people` will prefix `/people` onto all following routes.
 
 ```php
-$superpage->mount('/movies', function() use ($superpage) {
-    # will result in '/movies/'
+$superpage->mount('/people', function() use ($superpage) {
+    # will result in '/people/'
     $superpage->get('/', function() {
-        echo 'movies overview';
+        echo 'people overview';
     });
   
-    # will result in '/movies/id'
+    # will result in '/people/id'
     $superpage->get('/(\d+)', function($id) {
-        echo 'movie id ' . htmlentities($id);
+        echo 'person id : ' . htmlentities($id);
     });
 
 });
@@ -332,17 +336,17 @@ If you were to place this file into a subfolder (e.g. `public_html/some/sub/fold
 Integrate other libraries with **SuperPage** by making good use of the `use` keyword to pass dependencies into the handling functions.
 
 ```php
-$tpl = new \Foo\Bar\Template();
+$view = new \Foo\Bar\View();
 
-$superpage->get('/', function() use ($tpl) {
-    $tpl->load('home.tpl');
-    $tpl->setdata(array(
+$superpage->get('/', function() use ($view) {
+    $view->load('home.view');
+    $view->setdata(array(
         'name' => 'Berk Cambaz'
     ));
 });
 
-$superpage->run(function() use ($tpl) {
-    $tpl->display();
+$superpage->run(function() use ($view) {
+    $view->display();
 });
 ```
 
@@ -389,4 +393,4 @@ Even it works well, we wanted a simpler approach.
 
 ## License
 
-**SuperPage** is released under the MIT public license. See the `LICENSE` for details.
+SuperPage is released under the MIT public license. See the [LICENSE](LICENSE) for details.
