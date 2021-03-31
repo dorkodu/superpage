@@ -1,4 +1,4 @@
-![](assets/superpage-dark.png)
+![SuperPage Logo](assets/superpage-dark.png)
 
 # SuperPage
 
