@@ -21,7 +21,7 @@
   };
 
   $AboutPageController = function() {
-    echo "Superpage is a fast, simple and lightweight router for PHP applications.".PHP_EOL."It's developed by Dorkodu (dorkodu.com)";
+    echo "Superpage is a fast, simple and lightweight router for PHP apps.".PHP_EOL."It's developed by Dorkodu (dorkodu.com)";
   };
   
   # ROUTES
@@ -37,9 +37,9 @@
   $superpage->get("/about", $AboutPageController);
   $superpage->get("/greet/{name}", $GreetPageController);
 
+  $superpage->redirect("/who", "/about");
+
   # not found
-  $superpage->any("/oops", $ErrorPageController);
-  $superpage->fallback($ErrorPageController);
 
   # run it!
   $superpage->run();

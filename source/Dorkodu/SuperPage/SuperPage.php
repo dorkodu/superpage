@@ -85,6 +85,7 @@
     {
       $pattern = $this->root . '/' . trim($pattern, '/');
       $pattern = $this->root ? rtrim($pattern, '/') : $pattern;
+      return $pattern;
     }
 
     /**
@@ -178,7 +179,7 @@
     {
       # define which method we need to handle
       $this->requestMethod = $this->getRequestMethod();
-
+      
       # handle all routes
       $numHandled = 0;
       if (isset($this->routes[$this->requestMethod])) {
@@ -316,7 +317,7 @@
       if (isset($this->notFoundCallback) && !empty($this->notFoundCallback)) {
         $this->invoke($this->notFoundCallback);
       } else {
-        header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+        //header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
       }
     }
 

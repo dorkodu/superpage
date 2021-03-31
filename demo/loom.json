@@ -2,7 +2,7 @@
     "knotted": {
         "classmap": [],
         "namespaces": {
-            "Dorkodu": "loot/Dorkodu"
+            "Dorkodu": "../source/Dorkodu"
         }
     }
 }
