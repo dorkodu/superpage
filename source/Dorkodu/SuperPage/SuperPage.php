@@ -317,7 +317,7 @@
       if (isset($this->notFoundCallback) && !empty($this->notFoundCallback)) {
         $this->invoke($this->notFoundCallback);
       } else {
-        //header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+        header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
       }
     }
 
