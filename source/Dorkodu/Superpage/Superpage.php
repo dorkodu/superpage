@@ -63,12 +63,12 @@
      * @param string $to
      * @param int $statusCode
      */
-    public function redirect($from, $to, $statusCode = 301)
+    public function redirect($from, $to, $method = 'GET', $statusCode = 301)
     {
       $fromPattern = $this->unifyUriPattern($from);
-      $toPattern = $this->unifyUriPattern($from);
+      $toPattern = $this->unifyUriPattern($to);
 
-      $this->routes['GET'][] = array(
+      $this->routes[$method][] = array(
           'pattern' => $fromPattern,
           'redirect' => $toPattern,
           'statusCode' => $statusCode
@@ -236,7 +236,7 @@
 
           if (isset($route['redirect'])) {
             # static redirect
-            # TODO: if has any extracted params, pass them to the redirected callback
+            # TODO: if has any extracted params, pass them to the redirected callback. it's too hard though :(
             header('Location:'.$route['redirect'], true, $route['statusCode']);
           } else {
             # call the handling function with the URL parameters if the desired input is callable
