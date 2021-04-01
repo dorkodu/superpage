@@ -11,9 +11,10 @@ SuperPage is a simple, fast and lightweight, which means an awesome router for P
 - Dynamic Route Patterns: 
   - [Dynamic PCRE-based Route Patterns](#dynamic-pcre-based-route-patterns) 
   - [Dynamic Placeholder-based Route Patterns](#dynamic-placeholder-based-route-patterns)
+- [Redirecting](#redirecting)
+- [Sub-routing / Mounting Routes](#subrouting--mounting-routes)
 - [Optional Route Subpatterns](#optional-route-subpatterns)
 - [Supports `X-HTTP-Method-Override` header](#overriding-the-request-method)
-- [Subrouting / Mounting Routes](#subrouting--mounting-routes)
 - [Custom 404 handling](#custom-404)
 - [After Router Middleware / After App Middleware (Finish Callback)](#after-router-middleware--run-callback)
 - [Works fine in subfolders](#subfolder-support)
@@ -25,7 +26,7 @@ SuperPage is a simple, fast and lightweight, which means an awesome router for P
 
 ## Installation
 
-You can require `SuperPage.php` class, or use an autoloader like Loom or Composer.
+You can require `Dorkodu\SuperPage\SuperPage.php` class, or use an autoloader like Loom or Composer.
 
 ## Demo
 
